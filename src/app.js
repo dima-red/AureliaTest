@@ -1,28 +1,27 @@
-import { throwStatement } from "../../../../AppData/Local/Microsoft/TypeScript/3.7/node_modules/@babel/types/lib/index";
+import {inject, PLATFORM} from 'aurelia-framework';
+import {WebAPI} from './web-api';
 
+@inject(WebAPI)
 export class App {
-  constructor() {
-    this.heading = 'Todos';
-    this.todos = [];
-    this.todoDescription = '';
-  };
+  constructor(api) {
+    console.log(api);
+    this.api = api;
+  }
 
-  addTodo() {
-    if (this.todoDescription) {
-      this.todos.push({
-        description: this.todoDescription,
-        done: false
-      });
-      this.todoDescription = '';
-    };
-  };
-
-  removeTodo(todo, ev) {
-    let index = this.todos.indexOf(todo);
-    if (index !== -1) {
-      this.todos.splice(index, 1);
-    };
-
-    console.log(ev);
-  };
-};
+  configureRouter(config, router) {
+    config.title = 'Contacts';
+    config.map([
+      { 
+        route: '',
+        moduleId: PLATFORM.moduleName('no-selection'),
+        title: 'Select' 
+      },
+      {
+        route: 'contacts/:id',
+        moduleId: PLATFORM.moduleName('contact-detail'),
+        name:'contacts' 
+      }
+    ]);
+    this.router = router;
+  }
+}; 
